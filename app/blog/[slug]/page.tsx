@@ -31,9 +31,6 @@ export async function generateMetadata({
     summary: description,
     image,
   } = post.metadata;
-  const ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
 
   return {
     title,
@@ -44,17 +41,11 @@ export async function generateMetadata({
       type: "article",
       publishedTime,
       url: `${baseUrl}/blog/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage],
     },
   };
 }
