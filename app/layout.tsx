@@ -1,5 +1,7 @@
-import "./global.css";
 import type { Metadata } from "next";
+import { Fira_Code, IBM_Plex_Mono } from "next/font/google";
+import "./global.css";
+import "app/highlight";
 import { Navbar } from "./components/nav";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
@@ -32,6 +34,15 @@ export const metadata: Metadata = {
   },
 };
 
+const firaCode = Fira_Code({
+  subsets: ["cyrillic"],
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ["400", "500", "700"],
+  subsets: ["cyrillic"],
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -42,7 +53,7 @@ export default function RootLayout({
       lang="en"
       className="text-black bg-white dark:text-white dark:bg-black"
     >
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
+      <body className="antialiased max-w-2xl mx-4 mt-8 lg:mx-auto">
         <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
           <Navbar />
           {children}

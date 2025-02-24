@@ -1,7 +1,7 @@
+import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import Image from "next/image";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { highlight } from "sugar-high";
+import hljs from "highlight.js/lib/core";
 import React from "react";
 
 function Table({ data }) {
@@ -27,8 +27,7 @@ function Table({ data }) {
 }
 
 function CustomLink(props) {
-  let href = props.href;
-
+  const href = props.href;
   if (href.startsWith("/")) {
     return (
       <Link href={href} {...props}>
@@ -36,11 +35,9 @@ function CustomLink(props) {
       </Link>
     );
   }
-
   if (href.startsWith("#")) {
     return <a {...props} />;
   }
-
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
@@ -49,8 +46,12 @@ function RoundedImage(props) {
 }
 
 function Code({ children, ...props }) {
-  let codeHTML = highlight(children);
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+  const codeHTML = hljs.highlight(children, {
+    language: props.className?.replace("language-", "") || "plaintext",
+  });
+  return (
+    <code dangerouslySetInnerHTML={{ __html: codeHTML.value }} {...props} />
+  );
 }
 
 function slugify(str) {
@@ -86,24 +87,18 @@ function createHeading(level) {
   return Heading;
 }
 
-let components = {
-  h1: createHeading(1),
-  h2: createHeading(2),
-  h3: createHeading(3),
-  h4: createHeading(4),
-  h5: createHeading(5),
-  h6: createHeading(6),
-  Image: RoundedImage,
-  a: CustomLink,
-  code: Code,
-  Table,
-};
-
-export function CustomMDX(props) {
-  return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-    />
-  );
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+  return {
+    ...components,
+    h1: createHeading(1),
+    h2: createHeading(2),
+    h3: createHeading(3),
+    h4: createHeading(4),
+    h5: createHeading(5),
+    h6: createHeading(6),
+    Image: RoundedImage,
+    a: CustomLink,
+    code: Code,
+    Table,
+  };
 }
