@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import {getBlogPosts} from "./lib/blog-posts";
+import { getBlogPosts } from "./lib/blog-posts";
 
 export const baseUrl = "https://tulski.com";
 

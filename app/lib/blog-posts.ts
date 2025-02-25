@@ -6,32 +6,42 @@ async function getMDXFileNames(dir: string): Promise<string[]> {
   return files.filter((file) => extname(file) === ".mdx").map((file) => file);
 }
 
-async function getMdxFileFrontmatter(
-  markdownFile: string,
-): Promise<Record<any, any>> {
-  return (await import("app/markdown/" + markdownFile)).frontmatter;
+export interface ArticleHandle {
+  slug: string;
 }
 
-export interface BlogPost {
+export interface ArticleMetadata {
   title: string;
   publishedAt: string;
-  slug: string;
   summary: string;
   image?: string;
 }
 
-export async function getBlogPost(slug: string): Promise<BlogPost> {
-  const fileName = slug + ".mdx";
-  const frontMatter = await getMdxFileFrontmatter(fileName);
-  return {
-    slug,
-    ...frontMatter,
-  } as BlogPost;
-}
-
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  const dir = join(process.cwd(), "app", "markdown");
+export async function getBlogPostsHandles(): Promise<ArticleHandle[]> {
+  const dir = join(process.cwd(), "app", "markdown", "blog");
   const fileNames = await getMDXFileNames(dir);
   const slugs = fileNames.map((f) => f.replace(/\.mdx$/, ""));
-  return Promise.all(slugs.map((slugs) => getBlogPost(slugs)));
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function getBlogPosts(): Promise<
+  (ArticleHandle & ArticleMetadata)[]
+> {
+  const slugs = await getBlogPostsHandles();
+  return Promise.all(
+    slugs.map(async ({slug}) => {
+      const { frontmatter } = await import(`/app/markdown/blog/${slug}.mdx`);
+      return {
+        slug,
+        ...frontmatter,
+      };
+    }),
+  );
+}
+
+export async function getDraftsHandles(): Promise<ArticleHandle[]> {
+  const dir = join(process.cwd(), "app", "markdown", "draft");
+  const fileNames = await getMDXFileNames(dir);
+  const slugs = fileNames.map((f) => f.replace(/\.mdx$/, ""));
+  return slugs.map((slug) => ({ slug }));
 }

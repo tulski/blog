@@ -21,45 +21,45 @@ export default function Footer() {
       <ul className="font-sm mt-8 flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
         <li>
           <a
-              className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="mailto: me@tulski.com"
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="mailto: me@tulski.com"
           >
-            <ArrowIcon/>
+            <ArrowIcon />
             <p className="ml-2 h-7">me@tulski.com</p>
           </a>
         </li>
         <li>
           <a
-              className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://github.com/tulski"
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://github.com/tulski"
           >
-            <ArrowIcon/>
+            <ArrowIcon />
             <p className="ml-2 h-7">github</p>
           </a>
         </li>
         <li>
           <a
-              className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.linkedin.com/in/tulski/"
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.linkedin.com/in/tulski/"
           >
-            <ArrowIcon/>
+            <ArrowIcon />
             <p className="ml-2 h-7">linkedin</p>
           </a>
         </li>
         <li>
           <a
-              className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-              rel="noopener noreferrer"
-              target="_blank"
-              href="https://www.instagram.com/to_tulo/"
+            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href="https://www.instagram.com/to_tulo/"
           >
-            <ArrowIcon/>
+            <ArrowIcon />
             <p className="ml-2 h-7">instagram</p>
           </a>
         </li>

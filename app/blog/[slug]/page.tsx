@@ -1,9 +1,9 @@
-import { getBlogPost, getBlogPosts } from "../../lib/blog-posts";
+import { getBlogPostsHandles } from "../../lib/blog-posts";
 import { baseUrl } from "app/sitemap";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-  return getBlogPosts();
+  return getBlogPostsHandles();
 }
 
 interface Props {
@@ -12,40 +12,41 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
-  const post = await getBlogPost(slug);
+  const { frontmatter } = await import(`app/markdown/blog/${slug}.mdx`);
   return {
-    title: post.title,
-    description: post.summary,
+    title: frontmatter.title,
+    description: frontmatter.summary,
     openGraph: {
-      title: post.title,
-      description: post.summary,
+      title: frontmatter.title,
+      description: frontmatter.summary,
       type: "article",
-      publishedTime: post.publishedAt,
-      // url: `${baseUrl}/blog/${post.metadata.slug}`,
+      publishedTime: frontmatter.publishedAt,
+      url: `${baseUrl}/blog/${slug}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.summary,
+      title: frontmatter.title,
+      description: frontmatter.summary,
     },
   };
 }
 
-export default async function Blog({ params }: Props) {
+export default async function Article({ params }: Props) {
   const slug = (await params).slug;
-  const post = await getBlogPost(slug);
-  const { default: Post } = await import(`app/markdown/${post.slug}.mdx`);
+  const { default: Article, frontmatter } = await import(
+    `app/markdown/blog/${slug}.mdx`
+  );
   const openGraph = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title,
-    datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
-    description: post.summary,
-    image: post.image
-      ? `${baseUrl}${post.image}`
-      : `/og?title=${encodeURIComponent(post.title)}`,
-    url: `${baseUrl}/blog/${post.slug}`,
+    headline: frontmatter.title,
+    datePublished: frontmatter.publishedAt,
+    dateModified: frontmatter.publishedAt,
+    description: frontmatter.summary,
+    image: frontmatter.image
+      ? `${baseUrl}${frontmatter.image}`
+      : `/og?title=${encodeURIComponent(frontmatter.title)}`,
+    url: `${baseUrl}/blog/${frontmatter.slug}`,
     author: {
       "@type": "Person",
       name: "tulski",
@@ -61,15 +62,15 @@ export default async function Blog({ params }: Props) {
         }}
       />
       <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.title}
+        {frontmatter.title}
       </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {post.publishedAt}
+          {frontmatter.publishedAt}
         </p>
       </div>
-      <article className="prose font-mono">
-        <Post />
+      <article className="prose font-neutral">
+        <Article />
       </article>
     </section>
   );
