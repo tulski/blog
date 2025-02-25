@@ -2,8 +2,8 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Fira Code", sans-serif;
-  --font-mono: "IBM Plex Mono", serif;
+  --font-sans: "Roboto", serif;
+  --font-mono: "Fira Code", serif;
 }
 
 ::selection {

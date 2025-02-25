@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Fira_Code, IBM_Plex_Mono } from "next/font/google";
+import { Fira_Code, Roboto } from "next/font/google";
 import "./global.css";
 import "app/highlight";
 import { Navbar } from "./components/nav";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
+import * as console from "console";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -38,9 +39,9 @@ const firaCode = Fira_Code({
   subsets: ["cyrillic"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["400", "500", "700"],
-  subsets: ["cyrillic"],
+const roboto = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["cyrillic"]
 });
 
 export default function RootLayout({
