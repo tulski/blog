@@ -10,20 +10,12 @@ interface Props {
 
 export default async function Article({ params }: Props) {
   const slug = (await params).slug;
-  const { default: Article, frontmatter } = await import(
+  const { default: Article } = await import(
     `app/markdown/draft/${slug}.mdx`
   );
   return (
     <section>
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {frontmatter.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {frontmatter.publishedAt}
-        </p>
-      </div>
-      <article className="prose font-neutral">
+      <article className="prose dark:prose-invert font-neutral">
         <Article />
       </article>
     </section>

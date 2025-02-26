@@ -30,10 +30,10 @@ export async function getBlogPosts(): Promise<
   const slugs = await getBlogPostsHandles();
   return Promise.all(
     slugs.map(async ({slug}) => {
-      const { frontmatter } = await import(`/app/markdown/blog/${slug}.mdx`);
+      const { meta } = await import(`/app/markdown/blog/${slug}.mdx`);
       return {
         slug,
-        ...frontmatter,
+        ...meta,
       };
     }),
   );

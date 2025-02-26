@@ -1,10 +1,19 @@
 ---
 title: "Selected methods of conducting and detecting of Web Scraping"
-publishedAt: "28.01.2024"
-summary: "TODO"
+publishedAt: "26.02.2025"
+summary: "How I managed to write my engineering thesis."
 ---
+import ArticleHeader from '/app/components/article-header';
 
-### Abstract
+<ArticleHeader {...meta}/>
+
+There comes a time in every programmer's life when we need to get out of our IDE and write a little more than a few lines of code.
+For me, my engineering thesis was actually the first serious test in long-form writing.
+A year after the defense, I maintain that I am proud of my work - so much so that I decided to share it in my first ever blog post.
+
+The paper is titled **"Selected Methods of Conducting and Detecting Web Scraping."** and it's freely available [here on GitHub](https://github.com/tulski-thesis/thesis).
+
+## Abstract
 
 The paper focuses on web scraping — a technique for extracting information
 from the Internet. Both the perspective of conducting the technique mentioned and
@@ -20,3 +29,60 @@ of web scraping as a tool for effective data acquisition, as well as to the esse
 methods for its detection.
 
 **Keywords**: web scraping, bot detection, rate limiting, reverse proxy, browser fingerprinting
+
+
+## Write like an engineer
+
+I used a combination of LaTeX and Git - as befits a future engineer.
+The first took care of the professional appearance of the work (including the bibliography) and the second took care of version control and automation.
+GitHub Actions automated PDF builds, making the latest version readily available to my supervisor via 'Releases'.
+I highly recommend this approach.
+
+![repository](/images/web-scraping-detection/tulski-thesis-repo.png)
+
+## Final thoughts: tips for your engineering thesis.
+
+Writing an engineering thesis is a big deal, but if you've got the right approach, it can be really rewarding.
+Here are a few key things to remember:
+
+1. Choose a topic that you're genuinely interested in. I chose Web Scraping because I had two years of commercial experience in it and it was something I was keen to learn more about.
+
+2. Find the right tools for the job, like Git, LaTeX, and GitHub Actions, to make things easier.
+
+3. Start early and stay consistent with a schedule, because procrastination is your worst enemy. If you're struggling with discipline, get some gentle (or not-so-gentle) motivation from your supervisor. I planned my work over ~25 days.
+
+```plaintext
+$ git-bars -p day
+60 commits over 25 day(s)
+2024-01-28  1    ▀▀▀▀▀
+2024-01-21  1    ▀▀▀▀▀
+2024-01-17  1    ▀▀▀▀▀
+2024-01-16  2    ▀▀▀▀▀▀▀▀▀▀
+2024-01-12  3    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2024-01-10  1    ▀▀▀▀▀
+2024-01-08  2    ▀▀▀▀▀▀▀▀▀▀
+2024-01-07  3    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2024-01-06  4    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2024-01-04  1    ▀▀▀▀▀
+2024-01-03  2    ▀▀▀▀▀▀▀▀▀▀
+2024-01-02  2    ▀▀▀▀▀▀▀▀▀▀
+2023-12-19  2    ▀▀▀▀▀▀▀▀▀▀
+2023-12-10  1    ▀▀▀▀▀
+2023-12-05  1    ▀▀▀▀▀
+2023-12-04  1    ▀▀▀▀▀
+2023-12-01  1    ▀▀▀▀▀
+2023-11-30  1    ▀▀▀▀▀
+2023-11-26  7    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2023-11-25  4    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2023-10-27  1    ▀▀▀▀▀
+2023-10-26  1    ▀▀▀▀▀
+2023-10-23  1    ▀▀▀▀▀
+2023-10-22  6    ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+2023-10-21  10   ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+```
+
+# Summary
+
+I encourage you to read my thesis, available [here on GitHub](https://github.com/tulski-thesis/thesis).
+I hope this post has given you some insight into my process of long-form writing and my approach to it.
+I'd love to hear your thoughts and comments! Let me know what you think.

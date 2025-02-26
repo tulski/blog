@@ -13,9 +13,9 @@ const nextConfig = {
 
 const withMDX = createMDX({
   extension: /\.mdx?$/,
+  reactStrictMode: true,
   options: {
-    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
-  },
+    remarkPlugins: [remarkFrontmatter, [remarkMdxFrontmatter, {name: 'meta'}]]  },
 });
 
 // Merge MDX config with Next.js config
