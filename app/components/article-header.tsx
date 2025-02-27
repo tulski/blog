@@ -6,7 +6,7 @@ export default function ArticleHeader(meta: ArticleMetadata) {
     return (
         <>
             <h1 className="my-0">{meta.title}</h1>
-            <p>{meta.publishedAt}</p>
+            <p>{[meta.publishedAt, meta.time].filter(Boolean).join(' | ')}</p>
         </>
     )
 }

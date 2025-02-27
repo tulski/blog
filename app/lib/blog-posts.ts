@@ -13,6 +13,7 @@ export interface ArticleHandle {
 export interface ArticleMetadata {
   title: string;
   publishedAt: string;
+  time?: string;
   summary: string;
   image?: string;
 }
