@@ -1,0 +1,195 @@
+---
+title: "Spring: Binding maps from environment variables and YAML files"
+publishedAt: "01.03.2025"
+summary: "TODO"
+---
+import ArticleHeader from '/app/components/article-header';
+
+<ArticleHeader {...meta}/>
+
+Recently, I came across an interesting behavior in Spring - one that perfectly captures its ✨magic✨ in action.
+So, I thought it's worth sharing as a fun fact and something to know about.
+
+The culprit? [Spring Boot Relaxed Binding 2.0](https://github.com/spring-projects/spring-boot/wiki/relaxed-binding-2.0)
+
+## Real-Life Scenario
+
+As experienced developers, we follow the principles of [The Twelve-Factor App](https://12factor.net/config) and know that **configuration should be kept separate from the application code**.
+
+Now, let’s say we’re building a multi-tenant application. At some point, we might need a Map to associate certain settings — like time zones — with each tenant. A simplified version of this might look something like this:
+
+```java
+package com.tulski.relaxedproperties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import java.util.Map;
+
+@SpringBootApplication
+@EnableConfigurationProperties(RelaxedPropertiesApplication.AppConfig.class)
+public class RelaxedPropertiesApplication {
+
+    private static final Logger log = LoggerFactory.getLogger(RelaxedPropertiesApplication.class);
+
+    public static void main(String[] args) {
+        final var context = SpringApplication.run(RelaxedPropertiesApplication.class, args);
+        final var appConfig = context.getBean(AppConfig.class);
+        log.info("Output config:\n{}", appConfig);
+    }
+
+    @ConfigurationProperties(prefix = "app-config")
+    record AppConfig(Map<String, String> tenantTimezone) {
+    }
+}
+```
+
+### Binding Maps From YAML file
+
+If we define the variables in application.yml, the result of running the `RelaxedPropertiesApplication` shouldn’t be surprising—everything will work as expected.
+
+```yaml
+# application.yml
+app-config:
+  tenant-timezone:
+    PL: Europe/Warsaw
+    DE: Europe/Berlin
+```
+
+```plaintext
+# output
+AppConfig[
+    tenantTimezone={
+        PL=Europe/Warsaw
+        DE=Europe/Berlin
+    }
+]
+```
+
+### Binding Maps From Environment Variables
+
+However, if we configure it using **environment variables**, we need to be aware that the **map keys will be lowercase**.
+Why? When Spring Boot processes system environment properties, it converts them from SCREAMING_SNAKE_CASE into [properties notation (lowercase and dotted)](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.yaml.mapping-to-properties).
+
+Spring mentions this in its documentation.
+
+> Only the environment variable name is lower-casehttps://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.maps-from-environment-variablesd, not the value.
+> When setting `MY_PROPS_VALUES_KEY=VALUE`, the values Map contains a `{"key"="VALUE"}` entry.
+
+*source: [Binding Maps From Environment Variables]()*
+
+```plaintext
+# envs
+APPCONFIG_TENANTTIMEZONE_PL=Europe/Warsaw
+APPCONFIG_TENANTTIMEZONE_DE=Europe/Berlin
+# properties notation
+appconfig.tenanttimezone.pl=Europe/Warsaw
+appconfig.tenanttimezone.de=Europe/Berlin
+```
+
+```plaintext
+# output
+AppConfig[
+    tenantTimezone={
+        pl=Europe/Warsaw,
+        de=Europe/Berlin
+    }
+]
+```
+
+### Binding Maps From YAML File and Environment Variables
+
+Okay, what if I leave the default values in the YAML file and additionally configure them in environment variables?
+Environment variables will be converted to properties notation and, using relaxed binding, will override the config data file.
+**OS environment variables take precedence over configuration data files**.
+
+```plaintext
+# output
+AppConfig[
+    tenantTimezone={
+        pl=Europe/Warsaw,
+        de=Europe/Berlin,
+        PL=Europe/Warsaw,
+        DE=Europe/Berlin
+    }
+]
+```
+
+Now, it’s no surprise that we have both `PL` and `pl` keys, as well as `DE` and `de`, in the map.
+
+But what does it really mean for variables to be applied using relaxed binding? Let’s take a look at this example.
+
+```yaml
+# application.yaml
+app-config:
+  tenant-timezone:
+    EN: America/New_York
+    En: America/New_York
+    eN: America/New_York
+    E-N: America/New_York
+    e-n: America/New_York
+```
+
+```plaintext
+# envs
+APPCONFIG_TENANTTIMEZONE_EN=Europe/London
+```
+
+```plaintext
+# outcome
+AppConfig[
+    tenantTimezone={
+        en=Europe/London,
+        EN=Europe/London,
+        En=Europe/London,
+        eN=Europe/London,
+        E-N=Europe/London,
+        e-n=Europe/London
+    }
+]
+```
+
+`APPCONFIG_TENANTTIMEZONE_EN` was matched to each key in the config data file and overwrote its value.
+
+## Summary
+
+1. Keys from environment variable are always lowercase: Spring Boot automatically converts environment variable keys to lowercase when applying them.
+
+2. Be careful when binding values from environment variables with default values set in YAML - it can end up with ‘duplicate’ keys.
+
+3. Consider normalizing keys in your code: To avoid potential mismatches or confusion, it's a good practice to standardize key formats in your application code.
+
+### Key normalization
+
+The code with **key normalization** might look like the one below:
+
+```diff
+@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
+ import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+ import java.util.Map;
++import java.util.stream.Collectors;
+
+ @SpringBootApplication
+ @EnableConfigurationProperties(RelaxedPropertiesApplication.AppConfig.class)
+@@ -23,6 +24,14 @@ public class RelaxedPropertiesApplication {
+
+     @ConfigurationProperties(prefix = "app-config")
+     record AppConfig(Map<String, String> tenantTimezone) {
++
++        AppConfig(Map<String, String> tenantTimezone) {
++            this.tenantTimezone = tenantTimezone.entrySet().stream()
++                    .collect(Collectors.toMap(
++                            entry -> entry.getKey().toUpperCase(),
++                            Map.Entry::getValue
++                    ));
++        }
+     }
+ }
+```
+
+The source code can be found on my [Github](https://github.com/tulski/relaxed-properties).
