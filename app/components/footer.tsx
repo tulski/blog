@@ -64,8 +64,16 @@ export default function Footer() {
           </a>
         </li>
       </ul>
-      <p className="mt-8 text-neutral-600 dark:text-neutral-300">
-        © {new Date().getFullYear()} MIT Licensed
+      <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+        Copyright © {new Date().getFullYear()} &mdash;{" "}
+        <a
+          className="text-neutral-600 dark:text-neutral-300"
+          rel="noopener noreferrer"
+          target="_blank"
+          href={`https://github.com/tulski/blog/commit/${process.env.NEXT_PUBLIC_COMMIT_SHA}`}
+        >
+          {process.env.NEXT_PUBLIC_COMMIT_SHA?.slice(0, 7)}
+        </a>
       </p>
     </footer>
   );

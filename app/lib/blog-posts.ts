@@ -19,7 +19,7 @@ export interface ArticleMetadata {
 }
 
 export async function getBlogPostsHandles(): Promise<ArticleHandle[]> {
-  const dir = join(process.cwd(), "app", "markdown", "blog");
+  const dir = join(process.cwd(), "app", "posts", "blog");
   const fileNames = await getMDXFileNames(dir);
   const slugs = fileNames.map((f) => f.replace(/\.mdx$/, ""));
   return slugs.map((slug) => ({ slug }));
@@ -31,7 +31,7 @@ export async function getBlogPosts(): Promise<
   const slugs = await getBlogPostsHandles();
   return Promise.all(
     slugs.map(async ({slug}) => {
-      const { meta } = await import(`/app/markdown/blog/${slug}.mdx`);
+      const { meta } = await import(`/app/posts/blog/${slug}.mdx`);
       return {
         slug,
         ...meta,
@@ -41,7 +41,7 @@ export async function getBlogPosts(): Promise<
 }
 
 export async function getDraftsHandles(): Promise<ArticleHandle[]> {
-  const dir = join(process.cwd(), "app", "markdown", "draft");
+  const dir = join(process.cwd(), "app", "posts", "draft");
   const fileNames = await getMDXFileNames(dir);
   const slugs = fileNames.map((f) => f.replace(/\.mdx$/, ""));
   return slugs.map((slug) => ({ slug }));

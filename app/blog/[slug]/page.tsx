@@ -1,7 +1,6 @@
 import { getBlogPostsHandles } from "../../lib/blog-posts";
 import { baseUrl } from "app/sitemap";
 import { Metadata } from "next";
-import * as console from "console";
 
 export async function generateStaticParams() {
   return getBlogPostsHandles();
@@ -13,7 +12,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = (await params).slug;
-  const { meta } = await import(`app/markdown/blog/${slug}.mdx`);
+  const { meta } = await import(`app/posts/blog/${slug}.mdx`);
   return {
     title: meta.title,
     description: meta.summary,
@@ -35,11 +34,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Article({ params }: Props) {
   const slug = (await params).slug;
   const imp = await import(
-      `app/markdown/blog/${slug}.mdx`
+      `app/posts/blog/${slug}.mdx`
       );
-  console.log(imp);
   const { default: Article, meta } = await import(
-    `app/markdown/blog/${slug}.mdx`
+    `app/posts/blog/${slug}.mdx`
   );
   const openGraph = {
     "@context": "https://schema.org",
