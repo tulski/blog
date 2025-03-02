@@ -13,7 +13,7 @@ export function AboutMe() {
         />
         <div className="font-medium dark:text-white">
           <div className="text-xl">Michał Tułowiecki</div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-base text-gray-500 dark:text-gray-400">
             software engineer
           </div>
         </div>
