@@ -1,4 +1,4 @@
-import { getBlogPostsHandles } from "../../lib/blog-posts";
+import { getBlogPostsHandles } from "app/lib/blog-posts";
 import { baseUrl } from "app/sitemap";
 import { Metadata } from "next";
 
