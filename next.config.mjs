@@ -3,7 +3,6 @@
 import createMDX from "@next/mdx";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import withExportImages from 'next-export-optimize-images'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -20,4 +19,4 @@ const withMDX = createMDX({
     },
 })(nextConfig);
 
-export default withExportImages(withMDX);
+export default withMDX;

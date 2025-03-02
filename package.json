@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next-export-optimize-images",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
@@ -32,7 +32,6 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
-    "next-export-optimize-images": "^4.6.1",
     "prettier": "3.5.2"
   }
 }

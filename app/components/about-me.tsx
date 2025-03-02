@@ -1,15 +1,13 @@
-import Image from "next-export-optimize-images/image";
 import avatarPic from "../../public/images/avatar.png";
 
 export function AboutMe() {
   return (
     <div>
       <div className="flex items-center gap-4 mb-8">
-        <Image
+        <img
           className="size-15 rounded-full"
-          src={avatarPic}
+          src="/images/avatar.png"
           alt="tulski's avatar"
-          priority
         />
         <div className="font-medium dark:text-white">
           <div className="text-xl">Michał Tułowiecki</div>
