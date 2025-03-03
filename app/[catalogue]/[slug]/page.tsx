@@ -1,18 +1,19 @@
-import { getBlogPostsHandles } from "app/lib/blog-posts";
+import { getPostsHandles, loadPost } from "app/lib/posts";
 import { baseUrl } from "app/sitemap";
 import { Metadata } from "next";
+import { ArticleHandle } from "../../lib/posts";
 
-export async function generateStaticParams() {
-  return getBlogPostsHandles();
+export async function generateStaticParams(): Promise<ArticleHandle[]> {
+  return getPostsHandles();
 }
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<ArticleHandle>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = (await params).slug;
-  const { meta } = await import(`app/posts/blog/${slug}.mdx`);
+  const { catalogue, slug } = await params;
+  const { meta } = await import(`app/posts/${catalogue}/${slug}.mdx`);
   return {
     title: meta.title,
     description: meta.summary,
@@ -32,24 +33,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Article({ params }: Props) {
-  const slug = (await params).slug;
-  const imp = await import(
-      `app/posts/blog/${slug}.mdx`
-      );
-  const { default: Article, meta } = await import(
-    `app/posts/blog/${slug}.mdx`
-  );
+  const handle = await params;
+  const { Post, meta } = await loadPost(handle);
   const openGraph = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: meta.title,
     datePublished: meta.publishedAt,
     dateModified: meta.publishedAt,
-    description: meta.summary,
-    image: meta.image
-      ? `${baseUrl}${meta.image}`
-      : `/og?title=${encodeURIComponent(meta.title)}`,
-    url: `${baseUrl}/blog/${meta.slug}`,
+    description: meta.description,
+    url: `${baseUrl}/${handle.catalogue}/${handle.slug}`,
     author: {
       "@type": "Person",
       name: "tulski",
@@ -65,7 +58,7 @@ export default async function Article({ params }: Props) {
         }}
       />
       <article className="prose dark:prose-invert font-neutral">
-        <Article/>
+        <Post />
       </article>
     </section>
   );

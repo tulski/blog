@@ -3,9 +3,10 @@ title: "Spring: Binding maps from environment variables and YAML files"
 publishedAt: "01.03.2025"
 summary: "TODO"
 ---
-import ArticleHeader from '/app/components/article-header';
 
-<ArticleHeader {...meta}/>
+import ArticleHeader from "/app/components/article-header";
+
+<ArticleHeader {...meta} />
 
 Recently, I came across an interesting behavior in Spring - one that perfectly captures its ✨magic✨ in action.
 So, I thought it's worth sharing as a fun fact and something to know about.
@@ -80,7 +81,7 @@ Spring mentions this in its documentation.
 > Only the environment variable name is lower-casehttps://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.maps-from-environment-variablesd, not the value.
 > When setting `MY_PROPS_VALUES_KEY=VALUE`, the values Map contains a `{"key"="VALUE"}` entry.
 
-*source: [Binding Maps From Environment Variables]()*
+_source: [Binding Maps From Environment Variables]()_
 
 ```plaintext
 # envs

@@ -6,17 +6,20 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "export",
-    // Configure `pageExtensions` to include markdown and MDX files
-    pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  output: "export",
+  // Configure `pageExtensions` to include markdown and MDX files
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
 const withMDX = createMDX({
-    extension: /\.mdx?$/,
-    reactStrictMode: true,
-    options: {
-        remarkPlugins: [remarkFrontmatter, [remarkMdxFrontmatter, {name: 'meta'}]]
-    },
+  extension: /\.mdx?$/,
+  reactStrictMode: true,
+  options: {
+    remarkPlugins: [
+      remarkFrontmatter,
+      [remarkMdxFrontmatter, { name: "meta" }],
+    ],
+  },
 })(nextConfig);
 
 export default withMDX;
