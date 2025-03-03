@@ -1,4 +1,4 @@
-import { ArticleMetadata } from "../lib/blog-posts";
+import { ArticleMetadata } from "app/lib/posts";
 import * as console from "console";
 
 export default function ArticleHeader(meta: ArticleMetadata) {
@@ -6,7 +6,7 @@ export default function ArticleHeader(meta: ArticleMetadata) {
   return (
     <>
       <h1 className="my-0">{meta.title}</h1>
-      <p>{[meta.publishedAt, meta.time].filter(Boolean).join(" | ")}</p>
+      <p>{[meta.publishedAt].filter(Boolean).join(" | ")}</p>
     </>
   );
 }

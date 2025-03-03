@@ -1,7 +1,6 @@
-import { getPostsHandles, loadPost } from "app/lib/posts";
+import { getPostsHandles, loadPost, ArticleHandle } from "app/lib/posts";
 import { baseUrl } from "app/sitemap";
 import { Metadata } from "next";
-import { ArticleHandle } from "../../lib/posts";
 
 export async function generateStaticParams(): Promise<ArticleHandle[]> {
   return getPostsHandles();
