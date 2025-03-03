@@ -1,6 +1,6 @@
 import { async as fastGlob } from "fast-glob";
 import dayjs, { Dayjs } from "dayjs";
-import { Component } from "react";
+import { ElementType } from "react";
 
 export interface ArticleHandle {
   catalogue: string;
@@ -30,7 +30,7 @@ export async function loadPost({ catalogue, slug }: ArticleHandle) {
   );
   return {
     meta: meta as ArticleMetadata,
-    Post: Post as Component,
+    Post: Post as ElementType,
   };
 }
 
