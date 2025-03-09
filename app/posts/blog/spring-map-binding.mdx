@@ -1,5 +1,5 @@
 ---
-title: "Spring Boot Relaxed Binding: Something you need to know"
+title: "Spring Map Binding: Something you need to know"
 description: >-
     Be careful when binding values in Map from environment variables and config data files (YAML) - it may lead to unexpected behaviour, such as ‘duplicate’ keys
 published: true
@@ -12,8 +12,6 @@ import ArticleHeader from "/app/components/article-header";
 
 Recently, I came across an interesting behavior in Spring - one that perfectly captures its ✨magic✨ in action.
 So, I thought it's worth sharing as a fun fact and something to know about.
-
-The culprit? [Spring Boot Relaxed Binding 2.0](https://github.com/spring-projects/spring-boot/wiki/relaxed-binding-2.0)
 
 ## Real-Life Scenario
 
@@ -51,17 +49,25 @@ public class RelaxedPropertiesApplication {
 }
 ```
 
-### Binding Maps From YAML file
+### Config Data Files
 
-If we define the variables in application.yml, the result of running the `RelaxedPropertiesApplication` shouldn’t be surprising—everything will work as expected.
+The most common way to set values is to use [config data files](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.maps-from-environment-variables) (such as application.properties or application.yaml).
 
 ```yaml
-# application.yml
+# YAML
 app-config:
   tenant-timezone:
     PL: Europe/Warsaw
     DE: Europe/Berlin
 ```
+
+```yaml
+# Properties
+app-config.tenant-timezone.PL=Europe/Warsaw
+app-config.tenant-timezone.DE=Europe/Berlin
+```
+
+Both solutions are very intuitive, so the outcome of running the `RelaxedPropertiesApplication` should not surprise anyone.
 
 ```plaintext
 # output
@@ -73,17 +79,18 @@ AppConfig[
 ]
 ```
 
-### Binding Maps From Environment Variables
+### Environment Variables
 
-However, if we configure it using **environment variables**, we need to be aware that the **map keys will be lowercase**.
-Why? When Spring Boot processes system environment properties, it converts them from SCREAMING_SNAKE_CASE into [properties notation (lowercase and dotted)](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.yaml.mapping-to-properties).
+Another available solution is to use environment variables.
+If we use envs, we need to be aware that **map keys will be in lower case**.
+Why? When Spring Boot processes system environment properties, it converts them from `SCREAMING_SNAKE_CASE` into [properties notation (lowercase and dotted)](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.yaml.mapping-to-properties).
 
 Spring mentions this in its documentation.
 
-> Only the environment variable name is lower-casehttps://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.maps-from-environment-variablesd, not the value.
+> Only the environment variable name is lower-cased, not the value.
 > When setting `MY_PROPS_VALUES_KEY=VALUE`, the values Map contains a `{"key"="VALUE"}` entry.
 
-_source: [Binding Maps From Environment Variables]()_
+_source: [Binding Maps From Environment Variables](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.maps-from-environment-variables)_
 
 ```plaintext
 # envs
@@ -106,7 +113,7 @@ AppConfig[
 
 ### Binding Maps From YAML File and Environment Variables
 
-Okay, what if I leave the default values in the YAML file and additionally configure them in environment variables?
+Ok, what if I configure the application both in a configuration file and via environment variables at the same time?
 Environment variables will be converted to properties notation and, using relaxed binding, will override the config data file.
 **OS environment variables take precedence over configuration data files**.
 
@@ -122,8 +129,7 @@ AppConfig[
 ]
 ```
 
-Now, it’s no surprise that we have both `PL` and `pl` keys, as well as `DE` and `de`, in the map.
-
+Notice the pairs of `pl` and `PL` and `DE` and `de` keys - they are sort of "duplicated".
 But what does it really mean for variables to be applied using relaxed binding? Let’s take a look at this example.
 
 ```yaml
